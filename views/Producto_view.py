@@ -1,12 +1,12 @@
 from tkinter import Tk, Label, Entry, Button, Text, Scrollbar, messagebox
-from tkinter.ttk import Treeview
 from controllers.Producto_controller import ProductoController
-
+from controllers.MovimientoInventario_controller import MovimientoInventarioController
 class ProductoView:
     def __init__(self, sql_manager):
         self.root = Tk()
         self.root.title("Gestión de Productos")
-        self.producto_controller = ProductoController(sql_manager)
+        movimiento_controller=MovimientoInventarioController(sql_manager)
+        self.producto_controller = ProductoController(sql_manager,movimiento_controller)
 
         # Etiquetas y campos de entrada para agregar productos
         self.label_nombre = Label(self.root, text="Nombre:")

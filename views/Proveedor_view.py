@@ -1,11 +1,13 @@
 from tkinter import Tk, Label, Entry, Button, Text, Scrollbar, messagebox
 from controllers.Proveedor_controller import ProveedorController
+from controllers.MovimientoInventario_controller import MovimientoInventarioController  # Importamos el controlador de movimientos
 
 class ProveedorView:
     def __init__(self, sql_manager):
         self.root = Tk()
         self.root.title("Gestión de Proveedores")
-        self.proveedor_controller = ProveedorController(sql_manager)
+        movimiento_controller = MovimientoInventarioController(sql_manager)  # Creamos una instancia del controlador de movimientos
+        self.proveedor_controller = ProveedorController(sql_manager,movimiento_controller)
 
         # Etiquetas y campos de entrada para agregar proveedores
         self.label_nombre = Label(self.root, text="Nombre:")

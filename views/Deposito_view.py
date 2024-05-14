@@ -1,11 +1,12 @@
 from tkinter import Tk, Label, Entry, Button, Text, Scrollbar, messagebox
 from controllers.Deposito_controller import DepositoController
-
+from controllers.MovimientoInventario_controller import MovimientoInventarioController
 class DepositoView:
     def __init__(self, sql_manager):
         self.root = Tk()
         self.root.title("Gestión de Depósitos")
-        self.deposito_controller = DepositoController(sql_manager)
+        movimiento_controller=MovimientoInventarioController(sql_manager)
+        self.Deposito_controller = DepositoController(sql_manager,movimiento_controller)
 
         # Etiquetas y campos de entrada para agregar depósitos
         self.label_nombre = Label(self.root, text="Nombre:")

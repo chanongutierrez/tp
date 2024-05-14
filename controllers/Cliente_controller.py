@@ -1,35 +1,39 @@
 from models.Cliente import Cliente
-from models.SQLmanager import SQLManager
+from datetime import datetime  # Importamos datetime para obtener la fecha actual
+from models.MovimientoInventario import MovimientoInventario  # Importamos el modelo de MovimientoInventario
 
 class ClienteController:
-    def __init__(self, sql_manager):
-        self.sql_manager = sql_manager  # Corregido: Utiliza sql_manager directamente, sin instanciar nuevamente
+    def __init__(self, sql_manager, movimiento_controller):
+        self.sql_manager = sql_manager
+        self.movimiento_controller = movimiento_controller  # Agregamos el controlador de movimientos
 
     def create_cliente(self, nombre, direccion, telefono):
-        # Create a new Cliente object
+        # Crear un nuevo objeto Cliente
         new_cliente = Cliente(None, nombre, direccion, telefono)
 
-        # Save the cliente in the database
-        cliente_id = self.sql_manager.create_cliente(nombre, direccion, telefono)  # Corregido: Llama al método create_cliente del SQLManager
+        # Guardar el cliente en la base de datos
+        cliente_id = self.sql_manager.create_cliente(nombre, direccion, telefono)
         new_cliente.id_cliente = cliente_id
 
-        # Return the saved cliente
+        # Registrar el movimiento de creación de cliente
+        movimiento = MovimientoInventario(None, "Creación de cliente", datetime.now(), 1, 0, None, None, cliente_id)
+        self.movimiento_controller.create_movimiento(movimiento)
+
+        # Devolver el cliente guardado
         return new_cliente
 
-    def get_all_clientes(self):
-        # Retrieve all clientes from the database
-        clientes_data = self.sql_manager.get_all_clientes()  # Corregido: Llama al método get_all_clientes del SQLManager
-
-        # Convert database records into Cliente objects
-        clientes = [Cliente(*cliente_data) for cliente_data in clientes_data]
-
-        # Return the list of clientes
-        return clientes
-
     def update_cliente(self, id_cliente, nombre, direccion, telefono):
-        # Update the cliente in the database
-        self.sql_manager.update_cliente(id_cliente, nombre, direccion, telefono)  # Corregido: Llama al método update_cliente del SQLManager
+        # Actualizar el cliente en la base de datos
+        self.sql_manager.update_cliente(id_cliente, nombre, direccion, telefono)
+
+        # Registrar el movimiento de actualización de cliente
+        movimiento = MovimientoInventario(None, "Actualización de cliente", datetime.now(), 1, 0, None, None, id_cliente)
+        self.movimiento_controller.create_movimiento(movimiento)
 
     def delete_cliente(self, id_cliente):
-        # Delete the cliente from the database
-        self.sql_manager.delete_cliente(id_cliente)  # Corregido: Llama al método delete_cliente del SQLManager
+        # Registrar el movimiento de eliminación de cliente antes de eliminarlo de la base de datos
+        movimiento = MovimientoInventario(None, "Eliminación de cliente", datetime.now(), 1, 0, None, None, id_cliente)
+        self.movimiento_controller.create_movimiento(movimiento)
+
+        # Eliminar el cliente de la base de datos
+        self.sql_manager.delete_cliente(id_cliente)

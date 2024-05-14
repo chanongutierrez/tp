@@ -1,8 +1,7 @@
 from models.MovimientoInventario import MovimientoInventario
-from models.SQLmanager import SQLManager
 class MovimientoInventarioController:
     def __init__(self, sql_manager):
-        self.sql_manager = SQLManager
+        self.sql_manager = sql_manager
 
     def create_movimiento(self, tipo, fecha, cantidad, precio_unitario, id_producto, id_deposito_sucursal, id_proveedor):
         new_movimiento = MovimientoInventario(None, tipo, fecha, cantidad, precio_unitario, id_producto, id_deposito_sucursal, id_proveedor)

@@ -1,12 +1,13 @@
 from tkinter import Tk, Label, Entry, Button, Text, Scrollbar, messagebox
 from tkinter.ttk import Treeview
 from controllers.Cliente_controller import ClienteController
-
+from controllers.MovimientoInventario_controller import MovimientoInventarioController
 class ClienteView:
     def __init__(self, sql_manager):
         self.root = Tk()
         self.root.title("Gestión de Clientes")
-        self.cliente_controller = ClienteController(sql_manager)
+        movimiento_controller=MovimientoInventarioController(sql_manager)
+        self.cliente_controller = ClienteController(sql_manager,movimiento_controller)
 
         # Etiquetas y campos de entrada para agregar clientes
         self.label_nombre = Label(self.root, text="Nombre:")

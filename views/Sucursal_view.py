@@ -1,12 +1,14 @@
 from tkinter import Tk, Label, Entry, Button, Text, Scrollbar, messagebox
 from controllers.Sucursal_controller import SucursalController
+from controllers.MovimientoInventario_controller import MovimientoInventarioController  # Importamos el controlador de movimientos
 
 class SucursalView:
     def __init__(self, sql_manager):
         self.root = Tk()
         self.root.title("Gestión de Sucursales")
-        self.sucursal_controller = SucursalController(sql_manager)
-
+        movimiento_controller = MovimientoInventarioController(sql_manager)
+        self.sucursal_controller = SucursalController(sql_manager,movimiento_controller)
+        
         # Etiquetas y campos de entrada para agregar sucursales
         self.label_nombre = Label(self.root, text="Nombre:")
         self.label_nombre.grid(row=0, column=0, padx=10, pady=5)
